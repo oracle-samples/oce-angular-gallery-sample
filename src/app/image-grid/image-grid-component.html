@@ -1,0 +1,76 @@
+<!--
+  Copyright (c) 2021, Oracle and/or its affiliates.
+  Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/ 
+-->
+
+<div >
+  <div>
+    <div class="back" (click)="handleBack();">
+      <img src="assets/back.png" alt="Navigate back to Home"/>
+      <span>Home</span>
+    </div>
+    <h1 class="heading">{{categoryName}}</h1>
+    <h2 class="subheading">{{totalResults}} photos</h2>
+  </div>
+
+  <!-- Display a message if there are no images, otherwise display the grid -->
+  <div class="message" *ngIf="(!items || items.length == 0); else haveData">There are no images in this category.</div>
+
+  <!-- Grid VIEW of images -->
+  <ng-template #haveData>
+    <div *ngIf="!isServerRendering">
+      <div class="grid">
+        <div class="grid-item" *ngFor="let item of items; index as i">
+          <picture>
+            <source
+              type="image/webp"
+              srcset={{item.renditionUrls.srcset}}
+              sizes="(min-width: 480px) 200px, 150px" />
+            <source
+              srcset={{item.renditionUrls.jpgSrcset}}
+              sizes="(min-width: 480px) 200px, 150px" />
+            <img
+              src={{item.renditionUrls.small}}
+              loading="lazy"
+              (click)="handleClick(i)"
+              alt="Small Preview"
+              width={{item.renditionUrls.width}}
+              height={{item.renditionUrls.height}} />
+          </picture>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+
+  <!-- the selected image overlay section (only displayed if the "currentImage"
+       variable is set to an id > -1. -->
+  <div class="page-container" *ngIf="currentImage > -1" >
+    <section class="slideshow-container">
+      <div ref="slides" class="mySlides fade">
+        <div class="imgdiv">
+          <picture>
+            <source
+              type="image/webp"
+              srcset={{items[currentImage].renditionUrls.srcset}}
+              sizes="90vh" />
+            <source
+              srcset={{items[currentImage].renditionUrls.jpgSrcset}}
+              sizes="90vh" />
+            <img
+              src={{items[currentImage].renditionUrls.large}}
+              sizes="90vh"
+              loading="lazy"
+              alt="Large preview"
+              width={{items[currentImage].renditionUrls.width}}
+              height={{items[currentImage].renditionUrls.height}}/>
+          </picture>
+          <div class="numbertext">{{currentImage+1}} / {{totalResults}}</div>
+        </div>
+      </div>
+    </section>
+
+    <a class={{prevClassName}} (click)="handlePrevNextClick(false)">&#10094;</a>
+    <a class={{nextClassName}} (click)="handlePrevNextClick(true)">&#10095;</a>
+    <a class="close" (click)="handleCloseClick()">X</a>
+  </div>
+</div>

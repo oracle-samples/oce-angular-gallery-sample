@@ -1,0 +1,19 @@
+<!--
+  Copyright (c) 2021, Oracle and/or its affiliates.
+  Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/ 
+-->
+
+<div>
+
+  <h1 class="heading">Image Gallery</h1>
+
+  <div class="gallerycontainer">
+    <div *ngFor="let category of categories">
+      <app-gallery
+        [category]=category>
+      </app-gallery>
+    </div >
+  </div>
+
+</div>
+

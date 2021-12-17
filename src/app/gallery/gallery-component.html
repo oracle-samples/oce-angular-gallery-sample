@@ -1,0 +1,39 @@
+<!--
+  Copyright (c) 2021, Oracle and/or its affiliates.
+  Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/ 
+-->
+
+<section >
+  <a style="text-decoration: none;" [routerLink]="['/category',  category.id]" [queryParams]="{ categoryName: category.name}" >
+
+    <!-- Images for the category -->
+    <div class="gallery">
+      <div class="item" *ngFor="let item of category.items; index as index; ">
+        <div class="fade">
+          <picture>
+            <source
+              type="image/webp"
+              srcset={{item.renditionUrls.srcset}}
+              sizes="{{index == 0 ? '230px' : '75px'}}" />
+            <source
+              srcset={{item.renditionUrls.jpgSrcset}}
+              sizes="{{index == 0 ? '230px' : '75px'}}" />
+            <img
+              src={{item.renditionUrls.small}}
+              class="cover"
+              loading="lazy"
+              alt={{item.name}}
+              width="{{item.renditionUrls.width}}" height="{{item.renditionUrls.height}}"/>
+          </picture>
+        </div>
+      </div >
+    </div>
+
+    <!-- Category Name and total number of items in that category -->
+    <div class="caption">
+      <h2>{{category.name}}</h2>
+      <h3>{{category.totalResults}} photos</h3>
+    </div>
+
+  </a>
+</section>
