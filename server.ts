@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2021, Oracle and/or its affiliates.
+ * Copyright (c) 2020, 2022, Oracle and/or its affiliates.
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
 /* eslint-disable no-mixed-operators */
@@ -16,7 +16,6 @@ import * as http from 'http';
 import * as https from 'https';
 import { existsSync } from 'fs';
 import { HttpOptions } from './src/interfaces/interfaces';
-import { getAuthValue, isAuthNeeded } from './src/scripts/server-config-utils';
 import { AppServerModule } from './src/main.server';
 
 // The Express app is exported so that it can be used by serverless Functions.
@@ -56,9 +55,6 @@ export function app() {
 
     // Add the authorization header
     const options: HttpOptions = {};
-    if (authValue) {
-      options.headers = { Authorization: authValue };
-    }
 
     // define a function that writes the proxied content to the response
     const writeProxyContent = (proxyResponse) => {
@@ -95,13 +91,7 @@ export function app() {
    * - 'src/scripts/utils.getImageUrl' for the code proxying requests for image binaries
    */
   server.use('/content/', (req, res) => {
-    if (isAuthNeeded()) {
-      getAuthValue().then((authValue) => {
-        handleContentRequest(req, res, authValue);
-      });
-    } else {
-      handleContentRequest(req, res, '');
-    }
+    handleContentRequest(req, res, '');
   });
 
   // Serve static files from the dist folder
